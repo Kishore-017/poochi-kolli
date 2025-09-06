@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriDrone Pro - Control System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1b5e20;
+            --primary-light: #4c8c4a;
+            --primary-dark: #003300;
+            --secondary: #7cb342;
+            --accent: #f9a825;
+            --light: #f1f8e9;
+            --dark: #212121;
+            --error: #c62828;
+            --success: #2e7d32;
+            --warning: #ff6d00;
+            --info: #0277bd;
+            --gray: #f5f5f5;
+            --gray-dark: #e0e0e0;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-light: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.16), 0 4px 6px rgba(0,0,0,0.23);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            --transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fbf8;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            margin-right: 12px;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .sidebar.active {
+            display: flex;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-logo i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .sidebar-logo h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .sidebar-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            padding: 0 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--accent);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--accent);
+        }
+        
+        .menu-item i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 16px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        /* Welcome Panel */
+        .welcome-panel {
+            background: linear-gradient(120deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .welcome-content h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .welcome-content p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .welcome-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: var(--dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: #fbc02d;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Stats Cards */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .stat-title {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background-color: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+        }
+        
+        .stat-change {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-change.increase {
+            color: var(--success);
+        }
+        
+        .stat-change.decrease {
+            color: var(--error);
+        }
+        
+        /* Map Panel */
+        .map-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .map-container {
+            flex: 1;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* Controls Panel */
+        .controls-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .control-section {
+            margin-bottom: 20px;
+        }
+        
+        .control-section-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        
+        .control-item {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .control-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .control-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .control-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+        
+        /* Mission Controls */
+        .mission-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        /* Drones Panel */
+        .drones-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+        
+        .drones-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+        
+        .drones-table th {
+            text-align: left;
+            padding: 10px 12px;
+            background-color: var(--light);
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 13px;
+        }
+        
+        .drones-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--gray-dark);
+            font-size: 13px;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-active {
+            background-color: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .status-inactive {
+            background-color: #ffebee;
+            color: var(--error);
+        }
+        
+        .status-warning {
+            background-color: #fff8e1;
+            color: var(--warning);
+        }
+        
+        .action-cell {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .btn-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--primary);
+            font-size: 12px;
+        }
+        
+        .btn-icon:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Manual Control Panel */
+        .manual-control-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 2px solid var(--warning);
+        }
+        
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+        
+        .control-status {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+        
+        .control-body {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .joystick-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .joystick-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            background-color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .joystick {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            cursor: move;
+            position: absolute;
+            touch-action: none;
+            user-select: none;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .axis-label {
+            position: absolute;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .axis-up {
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .axis-down {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .axis-left {
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .axis-right {
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .control-btn {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 13px;
+        }
+        
+        .control-btn i {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+        
+        .altitude-btn {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .return-btn {
+            background-color: #fff8e1;
+            color: #f57c00;
+        }
+        
+        .emergency-btn {
+            background-color: #ffebee;
+            color: var(--error);
+            grid-column: span 2;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        .control-values {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--gray-dark);
+        }
+        
+        .control-value {
+            text-align: center;
+        }
+        
+        .value-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .value-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Weather Panel */
+        .weather-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .weather-current {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+        
+        .weather-icon {
+            font-size: 40px;
+            color: var(--accent);
+            margin-right: 15px;
+        }
+        
+        .weather-details {
+            flex: 1;
+        }
+        
+        .weather-temp {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .weather-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .weather-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .weather-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .weather-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .weather-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        /* Schedule Panel */
+        .schedule-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .schedule-list {
+            list-style: none;
+        }
+        
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-dark);
+        }
+        
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        
+        .schedule-time {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+            min-width: 70px;
+        }
+        
+        .schedule-details {
+            flex: 1;
+        }
+        
+        .schedule-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: var(--primary-dark);
+        }
+        
+        .schedule-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .schedule-status {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background-color: var(--light);
+            color: var(--primary);
+        }
+        
+        /* Analytics Panel */
+        .analytics-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chart-container {
+            flex: 1;
+            min-height: 250px;
+            position: relative;
+            background-color: var(--gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (min-width: 768px) {
+            .header {
+                padding: 15px 30px;
+            }
+            
+            .logo h1 {
+                font-size: 24px;
+            }
+            
+            .main-content {
+                padding: 30px;
+                gap: 30px;
+            }
+            
+            .welcome-panel {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 25px;
+            }
+            
+            .stats-panel {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .control-body {
+                flex-direction: row;
+            }
+            
+            .control-buttons {
+                width: 100%;
+            }
+            
+            .weather-stats {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .container {
+                display: flex;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+            
+            .sidebar {
+                display: flex;
+                width: 280px;
+                height: 100vh;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 100;
+            }
+            
+            .sidebar-header {
+                display: block;
+            }
+            
+            .sidebar-close {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 280px;
+                width: calc(100% - 280px);
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 1023px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div class="logo">
+            <i class="fas fa-drone"></i>
+            <h1>AgriDrone Pro</h1>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-avatar">FM</div>
+            <div class="user-details">
+                <div class="user-name">Farm Manager</div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-drone"></i>
+                <h2>AgriDrone Pro</h2>
+            </div>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-title">Main Menu</div>
+        <a href="hacka.html" class="menu-item active">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="hacka5.html" class="menu-item">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Field Mapping</span>
+        </a>
+        <a href="hacka1.html" class="menu-item">
+            <i class="fas fa-drone"></i>
+            <span>Drone Fleet</span>
+        </a>
+        
+        <div class="sidebar-title">Operations</div>
+        <a href="hacka6.html" class="menu-item">
+            <i class="fas fa-play-circle"></i>
+            <span>Mission Control</span>
+        </a>
+        <a href="hacka7.html" class="menu-item">
+            <i class="fas fa-tint"></i>
+            <span>Spray Analytics</span>
+        </a>
+        <a href="hacka8.html" class="menu-item">
+            <i class="fas fa-bug"></i>
+            <span>Infection Tracking</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-history"></i>
+            <span>Mission History</span>
+        </a>
+        
+        <div class="sidebar-title">Management</div>
+        <a href="hacka9.html" class="menu-item">
+            <i class="fas fa-flask"></i>
+            <span>Chemical Inventory</span>
+        </a>
+        <a href="hacka10.html" class="menu-item">
+            <i class="fas fa-wind"></i>
+            <span>Weather Forecast</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-clipboard-list"></i>
+            <span>Reports</span>
+        </a>
+        <a href="#" class="menu-item">
+            <i class="fas fa-sliders-h"></i>
+            <span>Settings</span>
+        </a>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Welcome Panel -->
+        <section class="welcome-panel">
+            <div class="welcome-content">
+                <h2>Agricultural Drone Control Center</h2>
+                <p>Monitor and manage your drone spraying operations with precision agriculture technology</p>
+            </div>
+            
+            <div class="welcome-actions">
+                <button class="btn btn-primary">
+                    <i class="fas fa-play"></i> Start Mission
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-chart-line"></i> View Reports
+                </button>
+            </div>
+        </section>
+        
+        <!-- Stats Panel -->
+        <section>
+            <h3 class="section-title">
+                <i class="fas fa-chart-bar"></i> Overview
+            </h3>
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">ACTIVE DRONES</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-drone"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">3/5</div>
+                    <div class="stat-change increase">
+                        <i class="fas fa-arrow-up"></i> 2 more than yesterday
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">SPRAY COVERAGE</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">42 acres</div>
+                    <div class="stat-change increase">
+                        <i class="fas fa-arrow-up"></i> 18% from target
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">PESTICIDE LEVEL</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">68%</div>
+                    <div class="stat-change decrease">
+                        <i class="fas fa-arrow-down"></i> 12% since last week
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">INFECTION RATE</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">12%</div>
+                    <div class="stat-change decrease">
+                        <i class="fas fa-arrow-down"></i> 6% from last week
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Map Panel -->
+        <section class="map-panel">
+            <h3 class="section-title">
+                <i class="fas fa-map-marked-alt"></i> Field Map & Live Drone Tracking
+            </h3>
+            
+            <div class="map-container">
+                Interactive Field Map with Live Drone Tracking
+            </div>
+        </section>
+        
+        <!-- Controls Panel -->
+        <section class="controls-panel">
+            <h3 class="section-title">
+                <i class="fas fa-sliders-h"></i> Spray Control Parameters
+            </h3>
+            
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="control-label">Spray Rate</div>
+                    <div class="control-value">4.2 L/ha</div>
+                    <input type="range" class="control-slider" min="1" max="10" step="0.1" value="4.2">
+                    <div class="control-actions">
+                        <button class="btn btn-sm btn-primary">Increase</button>
+                        <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <div class="control-label">Spray Pressure</div>
+                    <div class="control-value">3.8 Bar</div>
+                    <input type="range" class="control-slider" min="1" max="8" step="0.1" value="3.8">
+                    <div class="control-actions">
+                        <button class="btn btn-sm btn-primary">Increase</button>
+                        <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <div class="control-label">Flight Altitude</div>
+                    <div class="control-value">5.2 m</div>
+                    <input type="range" class="control-slider" min="2" max="15" step="0.1" value="5.2">
+                    <div class="control-actions">
+                        <button class="btn btn-sm btn-primary">Increase</button>
+                        <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                    </div>
+                </div>
+                
+                <div class="control-item">
+                    <div class="control-label">Flight Speed</div>
+                    <div class="control-value">7.4 m/s</div>
+                    <input type="range" class="control-slider" min="1" max="15" step="0.1" value="7.4">
+                    <div class="control-actions">
+                        <button class="btn btn-sm btn-primary">Increase</button>
+                        <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="control-section">
+                <div class="control-section-title">Mission Controls</div>
+                <div class="mission-controls">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play-circle"></i> Start Mission
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-pause-circle"></i> Pause
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--error); border-color: var(--error)">
+                        <i class="fas fa-stop-circle"></i> Emergency Stop
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-sync-alt"></i> Return to Base
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Drones Panel -->
+        <section class="drones-panel">
+            <h3 class="section-title">
+                <i class="fas fa-drone"></i> Drone Fleet Status
+            </h3>
+            
+            <table class="drones-table">
+                <thead>
+                    <tr>
+                        <th>Drone ID</th>
+                        <th>Status</th>
+                        <th>Battery</th>
+                        <th>Location</th>
+                        <th>Coverage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AGR-DRN-001</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                        <td>78%</td>
+                        <td>Field B-4, Sector 2</td>
+                        <td>42%</td>
+                        <td class="action-cell">
+                            <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AGR-DRN-002</td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                        <td>64%</td>
+                        <td>Field B-4, Sector 3</td>
+                        <td>28%</td>
+                        <td class="action-cell">
+                            <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AGR-DRN-003</td>
+                        <td><span class="status-badge status-warning">Returning</span></td>
+                        <td>23%</td>
+                        <td>En route to base</td>
+                        <td>100%</td>
+                        <td class="action-cell">
+                            <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AGR-DRN-004</td>
+                        <td><span class="status-badge status-inactive">Charging</span></td>
+                        <td>89%</td>
+                        <td>Base Station 1</td>
+                        <td>0%</td>
+                        <td class="action-cell">
+                            <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AGR-DRN-005</td>
+                        <td><span class="status-badge status-inactive">Maintenance</span></td>
+                        <td>100%</td>
+                        <td>Service Bay</td>
+                        <td>0%</td>
+                        <td class="action-cell">
+                            <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                            <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Manual Control Panel -->
+        <section class="manual-control-panel">
+            <div class="control-header">
+                <h3 class="section-title">
+                    <i class="fas fa-gamepad"></i> Emergency Manual Control
+                </h3>
+                <div class="control-status">
+                    <div class="status-indicator status-active"></div>
+                    <span>Connected to AGR-DRN-001</span>
+                </div>
+            </div>
+            
+            <div class="control-body">
+                <div class="joystick-section">
+                    <h4>Movement Control</h4>
+                    <div class="joystick-container" id="joystickContainer">
+                        <div class="axis-label axis-up">Forward</div>
+                        <div class="axis-label axis-down">Backward</div>
+                        <div class="axis-label axis-left">Left</div>
+                        <div class="axis-label axis-right">Right</div>
+                        <div class="joystick" id="joystick"></div>
+                    </div>
+                    <p>Drag the joystick to control drone movement</p>
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="control-btn altitude-btn" onclick="adjustAltitude(5)">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>Altitude +</span>
+                    </button>
+                    
+                    <button class="control-btn altitude-btn" onclick="adjustAltitude(-5)">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>Altitude -</span>
+                    </button>
+                    
+                    <button class="control-btn return-btn" onclick="returnToBase()">
+                        <i class="fas fa-home"></i>
+                        <span>Return to Base</span>
+                    </button>
+                    
+                    <button class="control-btn return-btn" onclick="hoverInPlace()">
+                        <i class="fas fa-pause-circle"></i>
+                        <span>Hover in Place</span>
+                    </button>
+                    
+                    <button class="control-btn emergency-btn" onclick="emergencyLanding()">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Emergency Landing</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="control-values">
+                <div class="control-value">
+                    <div class="value-label">Throttle</div>
+                    <div class="value-number" id="throttleValue">65%</div>
+                </div>
+                <div class="control-value">
+                    <div class="value-label">Yaw</div>
+                    <div class="value-number" id="yawValue">12°</div>
+                </div>
+                <div class="control-value">
+                    <div class="value-label">Pitch</div>
+                    <div class="value-number" id="pitchValue">5°</div>
+                </div>
+                <div class="control-value">
+                    <div class="value-label">Roll</div>
+                    <div class="value-number" id="rollValue">-3°</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Weather Panel -->
+        <section class="weather-panel">
+            <h3 class="section-title">
+                <i class="fas fa-cloud-sun"></i> Weather Conditions
+            </h3>
+            
+            <div class="weather-current">
+                <div class="weather-icon">
+                    <i class="fas fa-sun"></i>
+                </div>
+                <div class="weather-details">
+                    <div class="weather-temp">27°C</div>
+                    <div class="weather-desc">Sunny with light winds</div>
+                </div>
+            </div>
+            
+            <div class="weather-stats">
+                <div class="weather-stat">
+                    <div class="weather-stat-label">Wind Speed</div>
+                    <div class="weather-stat-value">12 km/h</div>
+                </div>
+                <div class="weather-stat">
+                    <div class="weather-stat-label">Humidity</div>
+                    <div class="weather-stat-value">45%</div>
+                </div>
+                <div class="weather-stat">
+                    <div class="weather-stat-label">Precipitation</div>
+                    <div class="weather-stat-value">0%</div>
+                </div>
+                <div class="weather-stat">
+                    <div class="weather-stat-label">Visibility</div>
+                    <div class="weather-stat-value">10 km</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Schedule Panel -->
+        <section class="schedule-panel">
+            <h3 class="section-title">
+                <i class="fas fa-calendar-alt"></i> Spray Schedule
+            </h3>
+            
+            <ul class="schedule-list">
+                <li class="schedule-item">
+                    <div class="schedule-time">08:00 AM</div>
+                    <div class="schedule-details">
+                        <div class="schedule-title">Field A-2 Spraying</div>
+                        <div class="schedule-desc">Preventive treatment for aphids</div>
+                    </div>
+                    <div class="schedule-status">Completed</div>
+                </li>
+                <li class="schedule-item">
+                    <div class="schedule-time">10:30 AM</div>
+                    <div class="schedule-details">
+                        <div class="schedule-title">Field B-4 Spraying</div>
+                        <div class="schedule-desc">Fungal infection treatment</div>
+                    </div>
+                    <div class="schedule-status">In Progress</div>
+                </li>
+                <li class="schedule-item">
+                    <div class="schedule-time">02:00 PM</div>
+                    <div class="schedule-details">
+                        <div class="schedule-title">Field C-1 Spraying</div>
+                        <div class="schedule-desc">Nutrient supplementation</div>
+                    </div>
+                    <div class="schedule-status">Upcoming</div>
+                </li>
+                <li class="schedule-item">
+                    <div class="schedule-time">04:30 PM</div>
+                    <div class="schedule-details">
+                        <div class="schedule-title">Field D-3 Spraying</div>
+                        <div class="schedule-desc">Preventive treatment</div>
+                    </div>
+                    <div class="schedule-status">Upcoming</div>
+                </li>
+            </ul>
+        </section>
+        
+        <!-- Analytics Panel -->
+        <section class="analytics-panel">
+            <h3 class="section-title">
+                <i class="fas fa-chart-line"></i> Spray Coverage Analytics
+            </h3>
+            
+            <div class="chart-container">
+                Spray Coverage Chart Visualization
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        sidebarClose.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+        });
+        
+        // Manual Control Functions
+        function adjustAltitude(change) {
+            const throttleElement = document.getElementById('throttleValue');
+            let currentThrottle = parseInt(throttleElement.textContent);
+            currentThrottle += change;
+            
+            // Limit between 0-100%
+            currentThrottle = Math.max(0, Math.min(100, currentThrottle));
+            throttleElement.textContent = currentThrottle + '%';
+            
+            // In a real application, this would send a command to the drone
+            console.log(`Adjusting altitude to: ${currentThrottle}%`);
+        }
+        
+        function returnToBase() {
+            // In a real application, this would initiate return to base procedure
+            alert('Initiating return to base procedure for AGR-DRN-001');
+        }
+        
+        function hoverInPlace() {
+            // In a real application, this would command the drone to hover
+            alert('Drone AGR-DRN-001 will now hover in place');
+        }
+        
+        function emergencyLanding() {
+            // In a real application, this would initiate emergency landing
+            const confirmLanding = confirm('WARNING: This will initiate emergency landing procedure. Are you sure?');
+            
+            if (confirmLanding) {
+                alert('Emergency landing procedure initiated for AGR-DRN-001');
+            }
+        }
+        
+        // Joystick functionality
+        const joystick = document.getElementById('joystick');
+        const joystickContainer = document.getElementById('joystickContainer');
+        const joystickSize = joystickContainer.offsetWidth;
+        const joystickRadius = joystickSize / 2;
+        const joystickHandleRadius = 25;
+        
+        let dragging = false;
+        
+        // Initialize joystick position
+        joystick.style.left = (joystickRadius - joystickHandleRadius) + 'px';
+        joystick.style.top = (joystickRadius - joystickHandleRadius) + 'px';
+        
+        // Touch/mouse events for joystick
+        joystick.addEventListener('mousedown', startDrag);
+        joystick.addEventListener('touchstart', startDrag);
+        
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+        
+        document.addEventListener('mouseup', stopDrag);
+        document.addEventListener('touchend', stopDrag);
+        
+        function startDrag(e) {
+            e.preventDefault();
+            dragging = true;
+            joystick.style.transition = 'none';
+        }
+        
+        function drag(e) {
+            if (!dragging) return;
+            
+            e.preventDefault();
+            
+            let clientX, clientY;
+            
+            if (e.type === 'mousemove') {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            } else if (e.type === 'touchmove') {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+            
+            const rect = joystickContainer.getBoundingClientRect();
+            const containerX = rect.left + joystickRadius;
+            const containerY = rect.top + joystickRadius;
+            
+            let x = clientX - containerX;
+            let y = clientY - containerY;
+            
+            // Calculate distance from center
+            const distance = Math.min(Math.sqrt(x * x + y * y), joystickRadius - joystickHandleRadius);
+            
+            // Calculate angle
+            const angle = Math.atan2(y, x);
+            
+            // Calculate new position
+            const newX = Math.cos(angle) * distance;
+            const newY = Math.sin(angle) * distance;
+            
+            // Update joystick position
+            joystick.style.left = (joystickRadius + newX - joystickHandleRadius) + 'px';
+            joystick.style.top = (joystickRadius + newY - joystickHandleRadius) + 'px';
+            
+            // Calculate values for drone control (normalized to -100 to 100)
+            const xValue = Math.round((newX / (joystickRadius - joystickHandleRadius)) * 100);
+            const yValue = Math.round((newY / (joystickRadius - joystickHandleRadius)) * 100);
+            
+            // Update display values
+            document.getElementById('pitchValue').textContent = yValue + '%';
+            document.getElementById('rollValue').textContent = xValue + '°';
+        }
+        
+        function stopDrag() {
+            if (!dragging) return;
+            
+            dragging = false;
+            joystick.style.transition = 'left 0.3s, top 0.3s';
+            
+            // Return to center
+            joystick.style.left = (joystickRadius - joystickHandleRadius) + 'px';
+            joystick.style.top = (joystickRadius - joystickHandleRadius) + 'px';
+            
+            // Reset values
+            setTimeout(() => {
+                document.getElementById('pitchValue').textContent = '0%';
+                document.getElementById('rollValue').textContent = '0°';
+            }, 300);
+        }
+        
+        // Menu item functionality
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

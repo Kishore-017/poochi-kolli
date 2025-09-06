@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriDrone Pro - Infection Tracking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1b5e20;
+            --primary-light: #4c8c4a;
+            --primary-dark: #003300;
+            --secondary: #7cb342;
+            --accent: #f9a825;
+            --light: #f1f8e9;
+            --dark: #212121;
+            --error: #c62828;
+            --success: #2e7d32;
+            --warning: #ff6d00;
+            --info: #0277bd;
+            --gray: #f5f5f5;
+            --gray-dark: #e0e0e0;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --text-light: #ffffff;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.16), 0 4px 6px rgba(0,0,0,0.23);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+            --transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8fbf8;
+            color: var(--text-primary);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .sidebar-logo i {
+            font-size: 28px;
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .sidebar-logo h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .sidebar-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding: 0 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--accent);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left-color: var(--accent);
+        }
+        
+        .menu-item i {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        
+        .sidebar-user {
+            margin-top: auto;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 12px;
+        }
+        
+        .sidebar-user-name {
+            font-weight: 500;
+        }
+        
+        /* Main Content Area */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+        
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        /* Infection Tracking Styles */
+        .infection-tracking {
+            display: none;
+        }
+        
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .ndvi-map {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .map-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .map-legend {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        
+        .healthy-color {
+            background-color: #4caf50;
+        }
+        
+        .moderate-color {
+            background-color: #ffeb3b;
+        }
+        
+        .severe-color {
+            background-color: #f44336;
+        }
+        
+        .map-container {
+            height: 320px;
+            background-color: #e8f5e9;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .hotspot {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(244, 67, 54, 0.6);
+            border: 2px solid #f44336;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        
+        .health-status {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            height: 400px;
+        }
+        
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .status-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .status-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--light);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        .status-details {
+            flex-grow: 1;
+        }
+        
+        .status-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+        }
+        
+        .status-value {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .status-indicator {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .indicator-healthy {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+        
+        .indicator-warning {
+            background-color: rgba(255, 152, 0, 0.2);
+            color: var(--warning);
+        }
+        
+        .indicator-critical {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+        
+        .ai-analysis {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .analysis-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .analysis-title {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        
+        .analysis-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .disease-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .disease-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            color: var(--error);
+        }
+        
+        .disease-details {
+            flex-grow: 1;
+        }
+        
+        .disease-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary-dark);
+        }
+        
+        .disease-probability {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        .disease-severity {
+            font-weight: 600;
+            color: var(--error);
+        }
+        
+        .tracking-controls {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .controls-title {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .control-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .control-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .control-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+        
+        .control-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .time-tracking {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .time-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .time-title {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        
+        .time-chart {
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            padding-top: 20px;
+            border-bottom: 2px solid var(--gray-dark);
+        }
+        
+        .chart-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .bar-value {
+            background: linear-gradient(to top, var(--primary-light), var(--primary));
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+        }
+        
+        .bar-label {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        .targeted-spray {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .spray-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .spray-title {
+            font-size: 20px;
+            color: var(--primary-dark);
+        }
+        
+        .spray-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .spray-info {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--gray-dark);
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+        }
+        
+        .info-value {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .spray-controls {
+            background-color: var(--light);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .slider-name {
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        
+        .slider-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--gray-dark);
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analysis-content,
+            .controls-grid,
+            .spray-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .menu-text,
+            .sidebar .sidebar-title,
+            .sidebar .sidebar-user-name {
+                display: none;
+            }
+            
+            .sidebar-header {
+                padding: 0 10px 20px;
+            }
+            
+            .menu-item {
+                padding: 14px;
+                justify-content: center;
+            }
+            
+            .menu-item i {
+                margin-right: 0;
+            }
+            
+            .sidebar-user {
+                justify-content: center;
+                padding: 15px 10px;
+            }
+            
+            .sidebar-user-avatar {
+                margin-right: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                padding: 10px 0;
+            }
+            
+            .sidebar-header {
+                padding: 0 15px 10px;
+                margin-bottom: 10px;
+            }
+            
+            .sidebar-logo {
+                justify-content: center;
+            }
+            
+            .menu-items-container {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .menu-section {
+                display: flex;
+                flex-direction: row;
+            }
+            
+            .menu-item {
+                padding: 10px 15px;
+                border-left: none;
+                border-bottom: 4px solid transparent;
+                flex-direction: column;
+                text-align: center;
+                min-width: 80px;
+            }
+            
+            .menu-item:hover {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .menu-item.active {
+                border-left-color: transparent;
+                border-bottom-color: var(--accent);
+            }
+            
+            .menu-item i {
+                margin-bottom: 5px;
+                font-size: 20px;
+            }
+            
+            .menu-text {
+                display: block;
+                font-size: 12px;
+            }
+            
+            .sidebar-title {
+                display: none;
+            }
+            
+            .sidebar-user {
+                display: none;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-drone"></i>
+                <h2>AgriDrone Pro</h2>
+            </div>
+        </div>
+        
+        <div class="sidebar-title">Main Menu</div>
+        <a href="hacka.html" class="menu-item" onclick="showSection('dashboard')">
+            <i class="fas fa-th-large"></i>
+            <span class="menu-text">Dashboard</span>
+        </a>
+        <a href="hacka5.html" class="menu-item" onclick="showSection('fieldMapping')">
+            <i class="fas fa-map-marked-alt"></i>
+            <span class="menu-text">Field Mapping</span>
+        </a>
+        <a href="hacka1.html" class="menu-item" onclick="showSection('droneFleet')">
+            <i class="fas fa-drone"></i>
+            <span class="menu-text">Drone Fleet</span>
+        </a>
+        
+        <div class="sidebar-title">Operations</div>
+        <a href="hacka6.html" class="menu-item" onclick="showSection('missionControl')">
+            <i class="fas fa-play-circle"></i>
+            <span class="menu-text">Mission Control</span>
+        </a>
+        <a href="hacka7.html" class="menu-item" onclick="showSection('sprayAnalytics')">
+            <i class="fas fa-chart-bar"></i>
+            <span class="menu-text">Spray Analytics</span>
+        </a>
+        <a href="hacka8.html" class="menu-item active" onclick="showSection('infectionTracking')">
+            <i class="fas fa-bug"></i>
+            <span class="menu-text">Infection Tracking</span>
+        </a>
+        <a href="#" class="menu-item" onclick="showSection('missionHistory')">
+            <i class="fas fa-history"></i>
+            <span class="menu-text">Mission History</span>
+        </a>
+        
+        <div class="sidebar-title">Management</div>
+        <a href="hacka9.html" class="menu-item" onclick="showSection('chemicalInventory')">
+            <i class="fas fa-flask"></i>
+            <span class="menu-text">Chemical Inventory</span>
+        </a>
+        <a href="hacka10.html" class="menu-item" onclick="showSection('weatherForecast')">
+            <i class="fas fa-cloud-sun"></i>
+            <span class="menu-text">Weather Forecast</span>
+        </a>
+        
+        <div class="sidebar-user">
+            <div class="sidebar-user-avatar">B</div>
+            <div class="sidebar-user-name">Barents</div>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <i class="fas fa-bug"></i>
+                    <h1>AgriDrone Infection Tracking</h1>
+                </div>
+                
+                <div class="user-info">
+                    <div class="user-avatar">IT</div>
+                    <div class="user-details">
+                        <div class="user-name">Infection Tracker</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Infection Tracking Content -->
+            <div class="main-content infection-tracking" id="infectionTracking">
+                <h1 class="section-title">
+                    <i class="fas fa-bug"></i> Crop Health Monitoring & Infection Tracking
+                </h1>
+                
+                <div class="monitoring-grid">
+                    <div class="ndvi-map">
+                        <div class="map-header">
+                            <h3 class="map-title">NDVI Health Map</h3>
+                            <div class="map-legend">
+                                <div class="legend-item">
+                                    <div class="legend-color healthy-color"></div>
+                                    <span>Healthy</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color moderate-color"></div>
+                                    <span>Moderate</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color severe-color"></div>
+                                    <span>Severe</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-container" id="ndviMap">
+                            <!-- Hotspots will be added dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div class="health-status">
+                        <div class="status-header">
+                            <h3 class="status-title">Crop Health Status</h3>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                        </div>
+                        <div class="status-cards">
+                            <div class="status-card">
+                                <div class="status-icon">
+                                    <i class="fas fa-leaf"></i>
+                                </div>
+                                <div class="status-details">
+                                    <div class="status-name">NDVI Index</div>
+                                    <div class="status-value">0.68 - Moderate Health</div>
+                                </div>
+                                <div class="status-indicator indicator-warning">Warning</div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <div class="status-icon">
+                                    <i class="fas fa-thermometer-half"></i>
+                                </div>
+                                <div class="status-details">
+                                    <div class="status-name">Plant Stress</div>
+                                    <div class="status-value">Elevated in NW Sector</div>
+                                </div>
+                                <div class="status-indicator indicator-warning">Warning</div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <div class="status-icon">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="status-details">
+                                    <div class="status-name">Moisture Levels</div>
+                                    <div class="status-value">Adequate across field</div>
+                                </div>
+                                <div class="status-indicator indicator-healthy">Normal</div>
+                            </div>
+                            
+                            <div class="status-card">
+                                <div class="status-icon">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                                <div class="status-details">
+                                    <div class="status-name">Nutrient Deficiency</div>
+                                    <div class="status-value">Nitrogen low in patches</div>
+                                </div>
+                                <div class="status-indicator indicator-critical">Critical</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ai-analysis">
+                    <div class="analysis-header">
+                        <h3 class="analysis-title">AI Disease Identification</h3>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-brain"></i> Run Analysis
+                        </button>
+                    </div>
+                    <div class="analysis-content">
+                        <div class="disease-card">
+                            <div class="disease-icon">
+                                <i class="fas fa-virus"></i>
+                            </div>
+                            <div class="disease-details">
+                                <div class="disease-name">Fungal Infection</div>
+                                <div class="disease-probability">87% probability</div>
+                            </div>
+                            <div class="disease-severity">Severe</div>
+                        </div>
+                        
+                        <div class="disease-card">
+                            <div class="disease-icon">
+                                <i class="fas fa-bacteria"></i>
+                            </div>
+                            <div class="disease-details">
+                                <div class="disease-name">Bacterial Spot</div>
+                                <div class="disease-probability">63% probability</div>
+                            </div>
+                            <div class="disease-severity">Moderate</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tracking-controls">
+                    <div class="controls-header">
+                        <h3 class="controls-title">Infection Tracking Controls</h3>
+                        <button class="btn btn-outline">
+                            <i class="fas fa-history"></i> View History
+                        </button>
+                    </div>
+                    <div class="controls-grid">
+                        <div class="control-card">
+                            <div class="control-icon">
+                                <i class="fas fa-map-marked-alt"></i>
+                            </div>
+                            <div class="control-name">Hotspot Mapping</div>
+                            <div class="control-description">GPS-based mapping of infected zones with geotagged data</div>
+                            <button class="btn btn-primary">Activate</button>
+                        </div>
+                        
+                        <div class="control-card">
+                            <div class="control-icon">
+                                <i class="fas fa-ruler-combined"></i>
+                            </div>
+                            <div class="control-name">Severity Index</div>
+                            <div class="control-description">Measure and track infection severity across fields</div>
+                            <button class="btn btn-primary">Calculate</button>
+                        </div>
+                        
+                        <div class="control-card">
+                            <div class="control-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="control-name">Time Tracking</div>
+                            <div class="control-description">Monitor infection spread and progression over time</div>
+                            <button class="btn btn-primary">Track</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="time-tracking">
+                    <div class="time-header">
+                        <h3 class="time-title">Infection Spread Over Time</h3>
+                        <select class="chart-filter">
+                            <option>Last 7 Days</option>
+                            <option>Last 30 Days</option>
+                            <option>Last 90 Days</option>
+                        </select>
+                    </div>
+                    <div class="time-chart">
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 40%;"></div>
+                            <div class="bar-label">Mon</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 55%;"></div>
+                            <div class="bar-label">Tue</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 65%;"></div>
+                            <div class="bar-label">Wed</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 70%;"></div>
+                            <div class="bar-label">Thu</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 75%;"></div>
+                            <div class="bar-label">Fri</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 80%;"></div>
+                            <div class="bar-label">Sat</div>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="bar-value" style="height: 85%;"></div>
+                            <div class="bar-label">Sun</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="targeted-spray">
+                    <div class="spray-header">
+                        <h3 class="spray-title">Targeted Spray Mechanism</h3>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> Execute Targeted Spray
+                        </button>
+                    </div>
+                    <div class="spray-content">
+                        <div class="spray-info">
+                            <div class="info-item">
+                                <span class="info-label">Infected Area:</span>
+                                <span class="info-value">8.5 acres (12% of field)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Recommended Chemical:</span>
+                                <span class="info-value">Fungicide A (87% efficacy)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Estimated Required:</span>
+                                <span class="info-value">35.7 liters</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Spray Pattern:</span>
+                                <span class="info-value">Precision (5m resolution)</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Time Estimate:</span>
+                                <span class="info-value">25 minutes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="spray-controls">
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span class="slider-name">Spray Intensity</span>
+                                    <span class="slider-value">Medium</span>
+                                </div>
+                                <input type="range" min="1" max="3" value="2" step="1" class="slider" id="sprayIntensitySlider">
+                            </div>
+                            
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span class="slider-name">Chemical Concentration</span>
+                                    <span class="slider-value">75%</span>
+                                </div>
+                                <input type="range" min="10" max="100" value="75" step="5" class="slider" id="concentrationSlider">
+                            </div>
+                            
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span class="slider-name">Coverage Buffer</span>
+                                    <span class="slider-value">2.5m</span>
+                                </div>
+                                <input type="range" min="1" max="5" value="2.5" step="0.5" class="slider" id="coverageSlider">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show different sections
+        function showSection(sectionId) {
+            // For this demo, we'll only handle infection tracking
+            if (sectionId === 'infectionTracking') {
+                document.getElementById('infectionTracking').style.display = 'block';
+                // You would hide other sections here in a real implementation
+            }
+        }
+        
+        // Initialize infection tracking as the active section
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('infectionTracking');
+            
+            // Create hotspots on the NDVI map
+            const ndviMap = document.getElementById('ndviMap');
+            const hotspots = [
+                { top: '20%', left: '30%', size: '40px', severity: 'severe' },
+                { top: '40%', left: '60%', size: '30px', severity: 'moderate' },
+                { top: '65%', left: '45%', size: '35px', severity: 'severe' },
+                { top: '50%', left: '20%', size: '25px', severity: 'moderate' },
+                { top: '75%', left: '70%', size: '20px', severity: 'moderate' }
+            ];
+            
+            hotspots.forEach(hotspot => {
+                const element = document.createElement('div');
+                element.className = 'hotspot';
+                element.style.top = hotspot.top;
+                element.style.left = hotspot.left;
+                element.style.width = hotspot.size;
+                element.style.height = hotspot.size;
+                
+                if (hotspot.severity === 'severe') {
+                    element.style.backgroundColor = 'rgba(244, 67, 54, 0.6)';
+                    element.style.borderColor = '#f44336';
+                } else {
+                    element.style.backgroundColor = 'rgba(255, 152, 0, 0.6)';
+                    element.style.borderColor = '#ff9800';
+                }
+                
+                ndviMap.appendChild(element);
+            });
+            
+            // Setup sliders
+            const sliders = document.querySelectorAll('.slider');
+            sliders.forEach(slider => {
+                const valueDisplay = slider.previousElementSibling.querySelector('.slider-value');
+                
+                // Set initial value based on slider type
+                if (slider.id === 'sprayIntensitySlider') {
+                    const values = ['Low', 'Medium', 'High'];
+                    valueDisplay.textContent = values[slider.value - 1];
+                } else if (slider.id === 'concentrationSlider') {
+                    valueDisplay.textContent = `${slider.value}%`;
+                } else if (slider.id === 'coverageSlider') {
+                    valueDisplay.textContent = `${slider.value}m`;
+                }
+                
+                slider.addEventListener('input', function() {
+                    if (this.id === 'sprayIntensitySlider') {
+                        const values = ['Low', 'Medium', 'High'];
+                        valueDisplay.textContent = values[this.value - 1];
+                    } else if (this.id === 'concentrationSlider') {
+                        valueDisplay.textContent = `${this.value}%`;
+                    } else if (this.id === 'coverageSlider') {
+                        valueDisplay.textContent = `${this.value}m`;
+                    }
+                });
+            });
+            
+            // Simulate real-time updates
+            setInterval(() => {
+                // Randomly update one of the status indicators
+                const indicators = document.querySelectorAll('.status-indicator');
+                const randomIndex = Math.floor(Math.random() * indicators.length);
+                const indicator = indicators[randomIndex];
+                
+                // Toggle between warning and normal for demo purposes
+                if (indicator.classList.contains('indicator-warning')) {
+                    indicator.classList.remove('indicator-warning');
+                    indicator.classList.add('indicator-healthy');
+                    indicator.textContent = 'Normal';
+                } else {
+                    indicator.classList.remove('indicator-healthy');
+                    indicator.classList.add('indicator-warning');
+                    indicator.textContent = 'Warning';
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
