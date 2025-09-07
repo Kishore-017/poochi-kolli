@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriDrone Pro - Control System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <i class="fas fa-drone"></i> Agricultural Drone Control System
+            </div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <div class="user-info">
+                    <div class="user-avatar">FM</div>
+                    <div class="user-details">
+                        <div class="user-name">Farm Manager</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Horizontal Sidebar -->
+        <div class="sidebar-container">
+            <nav class="sidebar">
+                <div class="menu-section">
+                    <div class="menu-section-title">Main</div>
+                    <div class="menu-items">
+                        <div class="menu-item active" data-target="dashboard">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="map-panel">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Field Mapping</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="drones-panel">
+                            <i class="fas fa-drone"></i>
+                            <span>Drone Fleet</span>
+                            <span class="menu-badge">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">Operations</div>
+                    <div class="menu-items">
+                        <div class="menu-item" data-target="controls-panel">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Mission Control</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="analytics-panel">
+                            <i class="fas fa-tint"></i>
+                            <span>Spray Analytics</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="infection-tracking">
+                            <i class="fas fa-bug"></i>
+                            <span>Infection Tracking</span>
+                            <span class="menu-badge">Alert</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="mission-history">
+                            <i class="fas fa-history"></i>
+                            <span>Mission History</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">Management</div>
+                    <div class="menu-items">
+                        <div class="menu-item" data-target="chemical-inventory">
+                            <i class="fas fa-flask"></i>
+                            <span>Pesticides</span>
+                            <span class="menu-badge">Low</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="weather-panel">
+                            <i class="fas fa-wind"></i>
+                            <span>Weather Forecast</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="reports">
+                            <i class="fas fa-clipboard-list"></i>
+                            <span>Reports</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="settings">
+                            <i class="fas fa-sliders-h"></i>
+                            <span>Settings</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-section-title">Support</div>
+                    <div class="menu-items">
+                        <div class="menu-item" data-target="help">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Help & Support</span>
+                        </div>
+                        
+                        <div class="menu-item" data-target="logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Panel -->
+            <section class="welcome-panel panel-section active" id="dashboard">
+                <div class="welcome-content">
+                    <h2>Agricultural Drone Control Center</h2>
+                    <p>Monitor and manage your drone spraying operations with precision agriculture technology</p>
+                </div>
+                
+                <div class="welcome-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Mission
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-chart-line"></i> View Reports
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Stats Panel -->
+            <section class="stats-panel panel-section active" id="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">ACTIVE DRONES</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-drone"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">3/5</div>
+                    <div class="stat-change increase">
+                        <i class="fas fa-arrow-up"></i> 2 more than yesterday
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">SPRAY COVERAGE</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">42 acres</div>
+                    <div class="stat-change increase">
+                        <i class="fas fa-arrow-up"></i> 18% from target
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">PESTICIDE LEVEL</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">68%</div>
+                    <div class="stat-change decrease">
+                        <i class="fas fa-arrow-down"></i> 12% since last week
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-title">INFECTION RATE</div>
+                        <div class="stat-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">12%</div>
+                    <div class="stat-change decrease">
+                        <i class="fas fa-arrow-down"></i> 6% from last week
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Map Panel -->
+            <section class="map-panel panel-section" id="map-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-map-marked-alt"></i> Field Map & Live Drone Tracking
+                </h3>
+                
+                <div class="map-container">
+                    <div class="map-overlay">
+                        <h4>Select Field</h4>
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button class="btn btn-sm btn-primary" data-field="A-2">Field A-2</button>
+                            <button class="btn btn-sm btn-outline" data-field="B-4" style="color: var(--primary); border-color: var(--primary)">Field B-4</button>
+                            <button class="btn btn-sm btn-outline" data-field="C-1" style="color: var(--primary); border-color: var(--primary)">Field C-1</button>
+                            <button class="btn btn-sm btn-outline" data-field="D-3" style="color: var(--primary); border-color: var(--primary)">Field D-3</button>
+                        </div>
+                    </div>
+                    
+                    <div class="field-grid">
+                        <div class="field-cell" data-field="A-1">A-1</div>
+                        <div class="field-cell sprayed" data-field="A-2">A-2</div>
+                        <div class="field-cell" data-field="A-3">A-3</div>
+                        <div class="field-cell" data-field="A-4">A-4</div>
+                        <div class="field-cell" data-field="B-1">B-1</div>
+                        <div class="field-cell active infected" data-field="B-2">B-2</div>
+                        <div class="field-cell active" data-field="B-3">B-3</div>
+                        <div class="field-cell" data-field="B-4">B-4</div>
+                        <div class="field-cell" data-field="C-1">C-1</div>
+                        <div class="field-cell" data-field="C-2">C-2</div>
+                        <div class="field-cell" data-field="C-3">C-3</div>
+                        <div class="field-cell" data-field="C-4">C-4</div>
+                        <div class="field-cell" data-field="D-1">D-1</div>
+                        <div class="field-cell" data-field="D-2">D-2</div>
+                        <div class="field-cell" data-field="D-3">D-3</div>
+                        <div class="field-cell" data-field="D-4">D-4</div>
+                    </div>
+                    
+                    <div class="drone-marker" style="top: 35%; left: 40%;"></div>
+                    <div class="drone-marker" style="top: 35%; left: 50%;"></div>
+                    <div class="drone-marker" style="top: 60%; left: 70%;"></div>
+                    
+                    <div class="field-info">
+                        <h4>Field B-2</h4>
+                        <p><strong>Status:</strong> <span style="color: var(--error)">Infected</span></p>
+                        <p><strong>Crop:</strong> Corn</p>
+                        <p><strong>Area:</strong> 12.5 acres</p>
+                        <p><strong>Last Sprayed:</strong> 3 days ago</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Controls Panel -->
+            <section class="controls-panel panel-section" id="controls-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-sliders-h"></i> Spray Control Parameters
+                </h3>
+                
+                <div class="control-grid">
+                    <div class="control-item">
+                        <div class="control-label">Spray Rate</div>
+                        <div class="control-value">4.2 L/ha</div>
+                        <input type="range" class="control-slider" min="1" max="10" step="0.1" value="4.2">
+                        <div class="control-actions">
+                            <button class="btn btn-sm btn-primary">Increase</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-item">
+                        <div class="control-label">Spray Pressure</div>
+                        <div class="control-value">3.8 Bar</div>
+                        <input type="range" class="control-slider" min="1" max="8" step="0.1" value="3.8">
+                        <div class="control-actions">
+                            <button class="btn btn-sm btn-primary">Increase</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-item">
+                        <div class="control-label">Flight Altitude</div>
+                        <div class="control-value">5.2 m</div>
+                        <input type="range" class="control-slider" min="2" max="15" step="0.1" value="5.2">
+                        <div class="control-actions">
+                            <button class="btn btn-sm btn-primary">Increase</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                        </div>
+                    </div>
+                    
+                    <div class="control-item">
+                        <div class="control-label">Flight Speed</div>
+                        <div class="control-value">7.4 m/s</div>
+                        <input type="range" class="control-slider" min="1" max="15" step="0.1" value="7.4">
+                        <div class="control-actions">
+                            <button class="btn btn-sm btn-primary">Increase</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">Decrease</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-section">
+                    <div class="control-section-title">Mission Controls</div>
+                    <div class="control-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> Start Mission
+                        </button>
+                        <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                            <i class="fas fa-pause-circle"></i> Pause
+                        </button>
+                        <button class="btn btn-outline" style="color: var(--error); border-color: var(--error)">
+                            <i class="fas fa-stop-circle"></i> Emergency Stop
+                        </button>
+                        <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                            <i class="fas fa-sync-alt"></i> Return to Base
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Drones Panel -->
+            <section class="drones-panel panel-section" id="drones-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-drone"></i> Drone Fleet Status
+                </h3>
+                
+                <table class="drones-table">
+                    <thead>
+                        <tr>
+                            <th>Drone ID</th>
+                            <th>Status</th>
+                            <th>Battery</th>
+                            <th>Location</th>
+                            <th>Coverage</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AGR-DRN-001</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>78%</td>
+                            <td>Field B-4, Sector 2</td>
+                            <td>42%</td>
+                            <td class="action-cell">
+                                <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AGR-DRN-002</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>64%</td>
+                            <td>Field B-4, Sector 3</td>
+                            <td>28%</td>
+                            <td class="action-cell">
+                                <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AGR-DRN-003</td>
+                            <td><span class="status-badge status-warning">Returning</span></td>
+                            <td>23%</td>
+                            <td>En route to base</td>
+                            <td>100%</td>
+                            <td class="action-cell">
+                                <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AGR-DRN-004</td>
+                            <td><span class="status-badge status-inactive">Charging</span></td>
+                            <td>89%</td>
+                            <td>Base Station 1</td>
+                            <td>0%</td>
+                            <td class="action-cell">
+                                <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>AGR-DRN-005</td>
+                            <td><span class="status-badge status-inactive">Maintenance</span></td>
+                            <td>100%</td>
+                            <td>Service Bay</td>
+                            <td>0%</td>
+                            <td class="action-cell">
+                                <button class="btn btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-sliders-h"></i></button>
+                                <button class="btn btn-icon"><i class="fas fa-history"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            
+            <!-- Pesticide Panel -->
+            <section class="pesticide-panel panel-section" id="chemical-inventory">
+                <h3 class="section-title">
+                    <i class="fas fa-flask"></i> Pesticide Management
+                </h3>
+                
+                <div class="pesticide-alert">
+                    <div class="pesticide-alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="pesticide-alert-content">
+                        <h4>Low Inventory Alert</h4>
+                        <p>Fungicide XZ-42 is running low. Reorder soon to avoid disruption in operations.</p>
+                    </div>
+                </div>
+                
+                <div class="pesticide-stats">
+                    <div class="pesticide-stat">
+                        <div class="pesticide-stat-value low-level">18%</div>
+                        <div class="pesticide-stat-label">Fungicide XZ-42</div>
+                    </div>
+                    <div class="pesticide-stat">
+                        <div class="pesticide-stat-value medium-level">42%</div>
+                        <div class="pesticide-stat-label">Herbicide GR-24</div>
+                    </div>
+                    <div class="pesticide-stat">
+                        <div class="pesticide-stat-value good-level">78%</div>
+                        <div class="pesticide-stat-label">Insecticide IN-15</div>
+                    </div>
+                    <div class="pesticide-stat">
+                        <div class="pesticide-stat-value good-level">85%</div>
+                        <div class="pesticide-stat-label">Nutrient Supplement NS-8</div>
+                    </div>
+                </div>
+                
+                <table class="pesticide-table">
+                    <thead>
+                        <tr>
+                            <th>Chemical</th>
+                            <th>Type</th>
+                            <th>Current Level</th>
+                            <th>Optimal Rate</th>
+                            <th>Last Used</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fungicide XZ-42</td>
+                            <td>Fungicide</td>
+                            <td>
+                                <div>18%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-low" style="width: 18%"></div>
+                                </div>
+                            </td>
+                            <td>4.2 L/ha</td>
+                            <td>Today, 10:45 AM</td>
+                            <td><button class="order-btn">Reorder</button></td>
+                        </tr>
+                        <tr>
+                            <td>Herbicide GR-24</td>
+                            <td>Herbicide</td>
+                            <td>
+                                <div>42%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-medium" style="width: 42%"></div>
+                                </div>
+                            </td>
+                            <td>3.8 L/ha</td>
+                            <td>Oct 22, 02:30 PM</td>
+                            <td><button class="order-btn">Monitor</button></td>
+                        </tr>
+                        <tr>
+                            <td>Insecticide IN-15</td>
+                            <td>Insecticide</td>
+                            <td>
+                                <div>78%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-good" style="width: 78%"></div>
+                                </div>
+                            </td>
+                            <td>2.5 L/ha</td>
+                            <td>Oct 20, 04:45 PM</td>
+                            <td><button class="order-btn">Monitor</button></td>
+                        </tr>
+                        <tr>
+                            <td>Nutrient Supplement NS-8</td>
+                            <td>Foliar Feed</td>
+                            <td>
+                                <div>85%</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill progress-good" style="width: 85%"></div>
+                                </div>
+                            </td>
+                            <td>5.0 L/ha</td>
+                            <td>Yesterday, 08:15 AM</td>
+                            <td><button class="order-btn">Monitor</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="control-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Chemical
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-file-export"></i> Export Inventory
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-sync-alt"></i> Refresh Levels
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Manual Control Panel -->
+            <section class="manual-control-panel panel-section" id="manual-control">
+                <div class="control-header">
+                    <h3 class="section-title">
+                        <i class="fas fa-gamepad"></i> Emergency Manual Control
+                    </h3>
+                    <div class="control-status">
+                        <div class="status-indicator status-active"></div>
+                        <span>Connected to AGR-DRN-001</span>
+                    </div>
+                </div>
+                
+                <div class="control-body">
+                    <div class="joystick-section">
+                        <h4>Movement Control</h4>
+                        <div class="joystick-container" id="joystickContainer">
+                            <div class="axis-label axis-up">Forward</div>
+                            <div class="axis-label axis-down">Backward</div>
+                            <div class="axis-label axis-left">Left</div>
+                            <div class="axis-label axis-right">Right</div>
+                            <div class="joystick" id="joystick"></div>
+                        </div>
+                        <p>Drag the joystick to control drone movement</p>
+                    </div>
+                    
+                    <div class="control-buttons">
+                        <button class="control-btn altitude-btn" onclick="adjustAltitude(5)">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>Altitude +</span>
+                        </button>
+                        
+                        <button class="control-btn altitude-btn" onclick="adjustAltitude(-5)">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>Altitude -</span>
+                        </button>
+                        
+                        <button class="control-btn return-btn" onclick="returnToBase()">
+                            <i class="fas fa-home"></i>
+                            <span>Return to Base</span>
+                        </button>
+                        
+                        <button class="control-btn return-btn" onclick="hoverInPlace()">
+                            <i class="fas fa-pause-circle"></i>
+                            <span>Hover in Place</span>
+                        </button>
+                        
+                        <button class="control-btn emergency-btn" onclick="emergencyLanding()">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Emergency Landing</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="control-values">
+                    <div class="control-value">
+                        <div class="value-label">Throttle</div>
+                        <div class="value-number" id="throttleValue">65%</div>
+                    </div>
+                    <div class="control-value">
+                        <div class="value-label">Yaw</div>
+                        <div class="value-number" id="yawValue">12°</div>
+                    </div>
+                    <div class="control-value">
+                        <div class="value-label">Pitch</div>
+                        <div class="value-number" id="pitchValue">5°</div>
+                    </div>
+                    <div class="control-value">
+                        <div class="value-label">Roll</div>
+                        <div class="value-number" id="rollValue">-3°</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Weather Panel -->
+            <section class="weather-panel panel-section" id="weather-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-cloud-sun"></i> Weather Conditions
+                </h3>
+                
+                <div class="weather-current">
+                    <div class="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="weather-details">
+                        <div class="weather-temp">27°C</div>
+                    </div>
+                </div>
+                
+                <div class="weather-stats">
+                    <div class="weather-stat">
+                        <div class="weather-stat-label">Wind Speed</div>
+                        <div class="weather-stat-value">12 km/h</div>
+                    </div>
+                    <div class="weather-stat">
+                        <div class="weather-stat-label">Humidity</div>
+                        <div class="weather-stat-value">45%</div>
+                    </div>
+                    <div class="weather-stat">
+                        <div class="weather-stat-label">Precipitation</div>
+                        <div class="weather-stat-value">0%</div>
+                    </div>
+                    <div class="weather-stat">
+                        <div class="weather-stat-label">Visibility</div>
+                        <div class="weather-stat-value">10 km</div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <div class="control-section-title">5-Day Forecast</div>
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;">
+                        <div style="text-align: center; padding: 1rem; background-color: #f5f5f5; border-radius: var(--border-radius);">
+                            <div style="font-weight: 600;">Tomorrow</div>
+                            <i class="fas fa-sun" style="font-size: 2rem; color: var(--secondary); margin: 0.5rem 0;"></i>
+                            <div>26°C / 15°C</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background-color: #f5f5f5; border-radius: var(--border-radius);">
+                            <div style="font-weight: 600;">Wed</div>
+                            <i class="fas fa-cloud-sun" style="font-size: 2rem; color: var(--secondary); margin: 0.5rem 0;"></i>
+                            <div>24°C / 14°C</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background-color: #f5f5f5; border-radius: var(--border-radius);">
+                            <div style="font-weight: 600;">Thu</div>
+                            <i class="fas fa-cloud" style="font-size: 2rem; color: #757575; margin: 0.5rem 0;"></i>
+                            <div>22°C / 13°C</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background-color: #f5f5f5; border-radius: var(--border-radius);">
+                            <div style="font-weight: 600;">Fri</div>
+                            <i class="fas fa-cloud-rain" style="font-size: 2rem; color: #2196f3; margin: 0.5rem 0;"></i>
+                            <div>20°C / 12°C</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background-color: #f5f5f5; border-radius: var(--border-radius);">
+                            <div style="font-weight: 600;">Sat</div>
+                            <i class="fas fa-sun" style="font-size: 2rem; color: var(--secondary); margin: 0.5rem 0;"></i>
+                            <div>25°C / 14°C</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Schedule Panel -->
+            <section class="schedule-panel panel-section" id="schedule-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-calendar-alt"></i> Spray Schedule
+                </h3>
+                
+                <ul class="schedule-list">
+                    <li class="schedule-item">
+                        <div class="schedule-time">08:00 AM</div>
+                        <div class="schedule-details">
+                            <div class="schedule-title">Field A-2 Spraying</div>
+                            <div class="schedule-desc">Preventive treatment for aphids</div>
+                        </div>
+                        <div class="schedule-status">Completed</div>
+                    </li>
+                    <li class="schedule-item">
+                        <div class="schedule-time">10:30 AM</div>
+                        <div class="schedule-details">
+                            <div class="schedule-title">Field B-4 Spraying</div>
+                            <div class="schedule-desc">Fungal infection treatment</div>
+                        </div>
+                        <div class="schedule-status">In Progress</div>
+                    </li>
+                    <li class="schedule-item">
+                        <div class="schedule-time">02:00 PM</div>
+                        <div class="schedule-details">
+                            <div class="schedule-title">Field C-1 Spraying</div>
+                            <div class="schedule-desc">Nutrient supplementation</div>
+                        </div>
+                        <div class="schedule-status">Upcoming</div>
+                    </li>
+                    <li class="schedule-item">
+                        <div class="schedule-time">04:30 PM</div>
+                        <div class="schedule-details">
+                            <div class="schedule-title">Field D-3 Spraying</div>
+                            <div class="schedule-desc">Preventive treatment</div>
+                        </div>
+                        <div class="schedule-status">Upcoming</div>
+                    </li>
+                </ul>
+
+                <div class="control-actions" style="margin-top: 1.5rem;">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Schedule
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-edit"></i> Edit Schedule
+                    </button>
+                    <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                        <i class="fas fa-file-export"></i> Export Schedule
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Analytics Panel -->
+            <section class="analytics-panel panel-section" id="analytics-panel">
+                <h3 class="section-title">
+                    <i class="fas fa-chart-line"></i> Spray Coverage Analytics
+                </h3>
+                
+                <div class="analytics-container">
+                    <div class="analytics-chart">
+                        <h4>Weekly Coverage Trend</h4>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-bar" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <div>Spray Coverage Chart</div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-chart">
+                        <h4>Efficiency Metrics</h4>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <div>Efficiency Distribution</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="analytics-stats">
+                    <div class="analytics-stat">
+                        <div class="analytics-stat-value">92%</div>
+                        <div class="analytics-stat-label">Coverage Efficiency</div>
+                    </div>
+                    <div class="analytics-stat">
+                        <div class="analytics-stat-value">87%</div>
+                        <div class="analytics-stat-label">Chemical Utilization</div>
+                    </div>
+                    <div class="analytics-stat">
+                        <div class="analytics-stat-value">15%</div>
+                        <div class="analytics-stat-label">Reduction in Waste</div>
+                    </div>
+                    <div class="analytics-stat">
+                        <div class="analytics-stat-value">42 hrs</div>
+                        <div class="analytics-stat-label">Time Saved This Month</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Infection Tracking Panel -->
+            <section class="infection-tracking-panel panel-section" id="infection-tracking">
+                <h3 class="section-title">
+                    <i class="fas fa-bug"></i> Infection Tracking & Management
+                </h3>
+                
+                <div class="infection-alert">
+                    <div class="infection-alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="infection-alert-content">
+                        <h4>High Infection Alert</h4>
+                        <p>Field B-4 shows signs of severe fungal infection. Recommended treatment: Fungicide XZ-42 at increased concentration.</p>
+                    </div>
+                </div>
+                
+                <div class="infection-map">
+                    <div style="width: 100%; height: 300px; background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border-radius: var(--border-radius); display: flex; justify-content: center; align-items: center;">
+                        <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: #f44336; margin-right: 1rem;"></i>
+                        <div>Field Infection Heatmap Visualization</div>
+                    </div>
+                </div>
+                
+                <div class="infection-stats">
+                    <div class="infection-stat">
+                        <div class="infection-stat-value high-infection">18%</div>
+                        <div class="infection-stat-label">Field B-4 Infection Rate</div>
+                    </div>
+                    <div class="infection-stat">
+                        <div class="infection-stat-value medium-infection">7%</div>
+                        <div class="infection-stat-label">Field A-2 Infection Rate</div>
+                    </div>
+                    <div class="infection-stat">
+                        <div class="infection-stat-value low-infection">2%</div>
+                        <div class="infection-stat-label">Field C-1 Infection Rate</div>
+                    </div>
+                    <div class="infection-stat">
+                        <div class="infection-stat-value low-infection">1%</div>
+                        <div class="infection-stat-label">Field D-3 Infection Rate</div>
+                    </div>
+                </div>
+                
+                <div class="treatment-plan">
+                    <h4>Recommended Treatment Plan</h4>
+                    <ol class="treatment-steps">
+                        <li>Increase spray concentration of Fungicide XZ-42 to 15% for Field B-4</li>
+                        <li>Apply preventive treatment to surrounding fields A-2 and C-1</li>
+                        <li>Schedule follow-up inspection in 72 hours</li>
+                        <li>Isolate severely affected areas if infection spreads beyond 25% threshold</li>
+                    </ol>
+                </div>
+            </section>
+            
+            <!-- Reports Panel -->
+            <section class="reports-panel panel-section" id="reports">
+                <h3 class="section-title">
+                    <i class="fas fa-clipboard-list"></i> Reports & Analytics
+                </h3>
+                
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="report-title">Spray Coverage Report</div>
+                        <div class="report-description">Detailed analysis of spray coverage across all fields with efficiency metrics and recommendations.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="report-title">Chemical Usage Report</div>
+                        <div class="report-description">Comprehensive breakdown of chemical usage, costs, and inventory status with reorder recommendations.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="report-title">Infection Tracking Report</div>
+                        <div class="report-description">Trend analysis of crop infections with treatment effectiveness and predictive analytics.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-drone"></i>
+                        </div>
+                        <div class="report-title">Drone Performance Report</div>
+                        <div class="report-description">Performance metrics for each drone including battery health, maintenance needs, and operational efficiency.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="report-title">Cost Analysis Report</div>
+                        <div class="report-description">ROI analysis of drone operations compared to traditional methods with savings projections.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                    
+                    <div class="report-card">
+                        <div class="report-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="report-title">Monthly Summary Report</div>
+                        <div class="report-description">Comprehensive monthly performance summary with key metrics and executive insights.</div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Generate</button>
+                            <button class="btn btn-sm btn-outline" style="color: var(--primary); border-color: var(--primary)">View Previous</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Settings Panel -->
+            <section class="settings-panel panel-section" id="settings">
+                <h3 class="section-title">
+                    <i class="fas fa-sliders-h"></i> System Settings
+                </h3>
+                
+                <div class="settings-section">
+                    <h4 class="settings-section-title">Appearance</h4>
+                    
+                    <div class="theme-selector">
+                        <div class="theme-option active" data-theme="light">
+                            <i class="fas fa-sun"></i>
+                            <span>Light Mode</span>
+                        </div>
+                        <div class="theme-option" data-theme="dark">
+                            <i class="fas fa-moon"></i>
+                            <span>Dark Mode</span>
+                        </div>
+                        <div class="theme-option" data-theme="auto">
+                            <i class="fas fa-adjust"></i>
+                            <span>Auto</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4 class="settings-section-title">Drone Settings</h4>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label" for="defaultAltitude">Default Altitude</label>
+                            <input type="number" class="setting-input" id="defaultAltitude" value="5.2" step="0.1">
+                            <div class="setting-description">Default flight altitude in meters</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="defaultSpeed">Default Speed</label>
+                            <input type="number" class="setting-input" id="defaultSpeed" value="7.4" step="0.1">
+                            <div class="setting-description">Default flight speed in m/s</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="returnBattery">Return to Base Battery Level</label>
+                            <input type="number" class="setting-input" id="returnBattery" value="25" step="1">
+                            <div class="setting-description">Battery percentage at which drones automatically return to base</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="emergencyProtocol">Emergency Protocol</label>
+                            <select class="setting-input" id="emergencyProtocol">
+                                <option value="return">Return to Base</option>
+                                <option value="hover">Hover in Place</option>
+                                <option value="land">Land Immediately</option>
+                            </select>
+                            <div class="setting-description">Action taken when connection is lost</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4 class="settings-section-title">Spray Settings</h4>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label" for="defaultSprayRate">Default Spray Rate</label>
+                            <input type="number" class="setting-input" id="defaultSprayRate" value="4.2" step="0.1">
+                            <div class="setting-description">Default spray rate in L/ha</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="defaultPressure">Default Pressure</label>
+                            <input type="number" class="setting-input" id="defaultPressure" value="3.8" step="0.1">
+                            <div class="setting-description">Default spray pressure in Bar</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="maxSprayRate">Maximum Spray Rate</label>
+                            <input type="number" class="setting-input" id="maxSprayRate" value="8.0" step="0.1">
+                            <div class="setting-description">Maximum allowed spray rate in L/ha</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="minSprayRate">Minimum Spray Rate</label>
+                            <input type="number" class="setting-input" id="minSprayRate" value="1.5" step="0.1">
+                            <div class="setting-description">Minimum allowed spray rate in L/ha</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h4 class="settings-section-title">Notification Settings</h4>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label" for="lowBatteryAlert">Low Battery Alert</label>
+                            <select class="setting-input" id="lowBatteryAlert">
+                                <option value="30">30%</option>
+                                <option value="25" selected>25%</option>
+                                <option value="20">20%</option>
+                                <option value="15">15%</option>
+                            </select>
+                            <div class="setting-description">Notify when battery reaches this level</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="infectionAlert">Infection Alert Threshold</label>
+                            <select class="setting-input" id="infectionAlert">
+                                <option value="5">5%</option>
+                                <option value="10" selected>10%</option>
+                                <option value="15">15%</option>
+                                <option value="20">20%</option>
+                            </select>
+                            <div class="setting-description">Notify when infection exceeds this percentage</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label" for="weatherAlert">Weather Alert</label>
+                            <select class="setting-input" id="weatherAlert">
+                                <option value="enable" selected>Enabled</option>
+                                <option value="disable">Disabled</option>
+                            </select>
+                            <div class="setting-description">Notify about adverse weather conditions</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="save-settings">
+                    <button class="btn btn-primary" id="saveSettings">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Mission History Panel -->
+            <section class="mission-history-panel panel-section" id="mission-history">
+                <h3 class="section-title">
+                    <i class="fas fa-history"></i> Mission History
+                </h3>
+                
+                <div class="history-filters">
+                    <select class="filter-select" id="fieldFilter">
+                        <option value="all">All Fields</option>
+                        <option value="a2">Field A-2</option>
+                        <option value="b4">Field B-4</option>
+                        <option value="c1">Field C-1</option>
+                        <option value="d3">Field D-3</option>
+                    </select>
+                    
+                    <select class="filter-select" id="statusFilter">
+                        <option value="all">All Statuses</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                    
+                    <select class="filter-select" id="dateFilter">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30" selected>Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="365">Last Year</option>
+                    </select>
+                </div>
+                
+                <ul class="missions-list">
+                    <li class="mission-item">
+                        <div class="mission-header">
+                            <div class="mission-title">Field B-4 Fungal Treatment</div>
+                            <div class="mission-date">Today, 10:45 AM - 11:32 AM</div>
+                        </div>
+                        <div class="mission-details">
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Drone:</span>
+                                <span class="mission-detail-value">AGR-DRN-001</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Coverage:</span>
+                                <span class="mission-detail-value">42 acres</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Spray Rate:</span>
+                                <span class="mission-detail-value">4.8 L/ha</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Status:</span>
+                                <span class="mission-detail-value" style="color: var(--success);">Completed</span>
+                            </div>
+                        </div>
+                        <div class="mission-actions">
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-chart-line"></i> View Analytics
+                            </button>
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-redo"></i> Repeat Mission
+                            </button>
+                        </div>
+                    </li>
+                    
+                    <li class="mission-item">
+                        <div class="mission-header">
+                            <div class="mission-title">Field A-2 Preventive Spray</div>
+                            <div class="mission-date">Yesterday, 08:15 AM - 09:02 AM</div>
+                        </div>
+                        <div class="mission-details">
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Drone:</span>
+                                <span class="mission-detail-value">AGR-DRN-002</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Coverage:</span>
+                                <span class="mission-detail-value">38 acres</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Spray Rate:</span>
+                                <span class="mission-detail-value">4.2 L/ha</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Status:</span>
+                                <span class="mission-detail-value" style="color: var(--success);">Completed</span>
+                            </div>
+                        </div>
+                        <div class="mission-actions">
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-chart-line"></i> View Analytics
+                            </button>
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-redo"></i> Repeat Mission
+                            </button>
+                        </div>
+                    </li>
+                    
+                    <li class="mission-item">
+                        <div class="mission-header">
+                            <div class="mission-title">Field C-1 Nutrient Application</div>
+                            <div class="mission-date">October 22, 02:30 PM - 03:18 PM</div>
+                        </div>
+                        <div class="mission-details">
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Drone:</span>
+                                <span class="mission-detail-value">AGR-DRN-001</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Coverage:</span>
+                                <span class="mission-detail-value">45 acres</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Spray Rate:</span>
+                                <span class="mission-detail-value">3.9 L/ha</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Status:</span>
+                                <span class="mission-detail-value" style="color: var(--error);">Failed</span>
+                            </div>
+                        </div>
+                        <div class="mission-details">
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Reason:</span>
+                                <span class="mission-detail-value">Low battery, returned to base</span>
+                            </div>
+                        </div>
+                        <div class="mission-actions">
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-chart-line"></i> View Analytics
+                            </button>
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-redo"></i> Retry Mission
+                            </button>
+                        </div>
+                    </li>
+                    
+                    <li class="mission-item">
+                        <div class="mission-header">
+                            <div class="mission-title">Field D-3 Pest Control</div>
+                            <div class="mission-date">October 20, 04:45 PM - 05:22 PM</div>
+                        </div>
+                        <div class="mission-details">
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Drone:</span>
+                                <span class="mission-detail-value">AGR-DRN-003</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Coverage:</span>
+                                <span class="mission-detail-value">41 acres</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Spray Rate:</span>
+                                <span class="mission-detail-value">5.1 L/ha</span>
+                            </div>
+                            <div class="mission-detail">
+                                <span class="mission-detail-label">Status:</span>
+                                <span class="mission-detail-value" style="color: var(--success);">Completed</span>
+                            </div>
+                        </div>
+                        <div class="mission-actions">
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-chart-line"></i> View Analytics
+                            </button>
+                            <button class="btn btn-sm btn-outline">
+                                <i class="fas fa-redo"></i> Repeat Mission
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Help Panel -->
+            <section class="help-panel panel-section" id="help">
+                <h3 class="section-title">
+                    <i class="fas fa-question-circle"></i> Help & Support
+                </h3>
+                
+                <div class="help-grid">
+                    <div class="help-card">
+                        <div class="help-title">
+                            <i class="fas fa-book"></i> User Manual
+                        </div>
+                        <div class="help-content">
+                            <p>Access the complete user manual for detailed instructions on using the AgriDrone Pro Control System.</p>
+                            <button class="btn btn-sm btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-download"></i> Download Manual
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <div class="help-title">
+                            <i class="fas fa-video"></i> Video Tutorials
+                        </div>
+                        <div class="help-content">
+                            <p>Watch step-by-step video tutorials to learn how to maximize the potential of your agricultural drone system.</p>
+                            <button class="btn btn-sm btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-play-circle"></i> View Tutorials
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <div class="help-title">
+                            <i class="fas fa-question"></i> FAQ
+                        </div>
+                        <div class="help-content">
+                            <p>Find answers to frequently asked questions about drone operation, maintenance, and troubleshooting.</p>
+                            <button class="btn btn-sm btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-search"></i> Browse FAQ
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="help-card">
+                        <div class="help-title">
+                            <i class="fas fa-tools"></i> Troubleshooting
+                        </div>
+                        <div class="help-content">
+                            <p>Having issues with your drone or control system? Our troubleshooting guide can help resolve common problems.</p>
+                            <button class="btn btn-sm btn-primary" style="margin-top: 1rem;">
+                                <i class="fas fa-wrench"></i> Troubleshoot Issues
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="help-contact">
+                    <h4>Contact Support</h4>
+                    <p>If you need further assistance, our support team is available 24/7 to help you with any issues.</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-phone"></i> Call Support
+                        </button>
+                        <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                            <i class="fas fa-envelope"></i> Email Support
+                        </button>
+                        <button class="btn btn-outline" style="color: var(--primary); border-color: var(--primary)">
+                            <i class="fas fa-comment"></i> Live Chat
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js">
+       
+    </script>
+</body>
+</html>
